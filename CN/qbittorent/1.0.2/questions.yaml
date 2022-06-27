@@ -1,0 +1,225 @@
+groups:
+  - name: "Configuration"
+    description: "Qbittorent 应用程序配置"
+  - name: "Storage"
+    description: "为 qbittorrent 配置存储"
+  - name: "Networking"
+    description: "为 qbittorrent 配置网络"
+  - name: "Advanced DNS Settings"
+    description: "配置 DNS 设置"
+
+portals:
+  web_portal:
+    protocols:
+      - "http"
+    host:
+      - "$node_ip"
+    ports:
+      - "$variable-web_port"
+    path: "/"
+
+questions:
+  - variable: web_port
+    label: "qbittorrent 的 Web 端口"
+    group: Networking
+    schema:
+      type: int
+      min: 9000
+      max: 65535
+      default: 9080
+      required: true
+  - variable: tcp_port
+    label: "qbittorrent 的 TCP 端口"
+    group: Networking
+    schema:
+      type: int
+      min: 9000
+      max: 65535
+      default: 9881
+      required: true
+  - variable: udp_port
+    label: "qbittorrent 的 UDP 端口"
+    group: Networking
+    schema:
+      type: int
+      min: 9000
+      max: 65535
+      default: 9881
+      required: true
+
+  - variable: dnsConfig
+    label: "DNS 配置"
+    group: "Advanced DNS Settings"
+    schema:
+      type: dict
+      attrs:
+        - variable: options
+          label: "DNS 配置"
+          schema:
+            type: list
+            items:
+              - variable: optionsEntry
+                label: "选项条目配置"
+                schema:
+                  type: dict
+                  attrs:
+                    - variable: name
+                      label: "选项名称"
+                      default: "nameserver"
+                      schema:
+                        type: string
+                        required: true
+                    - variable: value
+                      label: "选项值"
+                      schema:
+                        type: string
+                        required: true
+
+  - variable: ownerUID
+    label: "文件系统用户ID"
+    group: Configuration
+    schema:
+      type: int
+      default: 1000
+      min: 1
+      max: 65535
+
+  - variable: ownerGID
+    label: "文件系统用户组ID"
+    group: Configuration
+    schema:
+      type: int
+      default: 1000
+      min: 1
+      max: 65535
+
+  - variable: timezone
+    label: "时区"
+    group: "Configuration"
+    schema:
+      type: string
+      $ref:
+        - "definitions/timezone"
+
+  - variable: environmentVariables
+    label: "Qbittorrent环境"
+    group: "Configuration"
+    schema:
+      type: list
+      default: [ ]
+      items:
+        - variable: environmentVariable
+          label: "环境变量"
+          schema:
+            type: dict
+            attrs:
+              - variable: name
+                label: "名称"
+                schema:
+                  type: string
+              - variable: value
+                label: "值"
+                schema:
+                  type: string
+
+  - variable: appVolumeMounts
+    label: "Qbittorrent 存储"
+    group: "Storage"
+    schema:
+      type: dict
+      attrs:
+        - variable: config
+          label: "配置文件存储路径"
+          schema:
+            type: dict
+            attrs:
+              - variable: datasetName
+                label: "配置文件所在的位置"
+                schema:
+                  type: string
+                  hidden: true
+                  $ref:
+                    - "normalize/ixVolume"
+                  show_if: [["hostPathEnabled", "=", false]]
+                  default: "ix-qbittorent_config"
+                  editable: false
+              - variable: mountPath
+                label: "挂载路径"
+                description: "容器内的位置"
+                schema:
+                  type: path
+                  hidden: true
+                  editable: true
+                  default: "/config"
+              - variable: hostPathEnabled
+                label: "为 Qbittorent 设置配置文件的储存路径"
+                schema:
+                  type: boolean
+                  default: false
+                  show_subquestions_if: true
+                  subquestions:
+                    - variable: hostPath
+                      label: "主机路径"
+                      schema:
+                        type: hostpath
+                        required: true
+        - variable: downloads
+          label: "下载储存的位置"
+          schema:
+            type: dict
+            attrs:
+              - variable: datasetName
+                label: "下载储存的位置"
+                schema:
+                  type: string
+                  hidden: true
+                  $ref:
+                    - "normalize/ixVolume"
+                  show_if: [["hostPathEnabled", "=", false]]
+                  default: "ix-qbittorent_data"
+                  editable: false
+              - variable: mountPath
+                label: "挂载路径"
+                description: "容器内的位置"
+                schema:
+                  type: path
+                  hidden: true
+                  editable: true
+                  default: "/downloads"
+              - variable: hostPathEnabled
+                label: "为 Qbittorent 设置下载储存的路径"
+                schema:
+                  type: boolean
+                  default: false
+                  show_subquestions_if: true
+                  subquestions:
+                    - variable: hostPath
+                      label: "主机路径"
+                      schema:
+                        type: hostpath
+                        required: true
+
+  - variable: extraAppVolumeMounts
+    label: "额外的储存路径"
+    group: "Storage"
+    schema:
+      type: list
+      items:
+        - variable: extraAppVolume
+          label: "主机路径"
+          description: "为容器挂载额外存储路径"
+          schema:
+            type: dict
+            attrs:
+              - variable: mountPath
+                label: "挂载路径"
+                description: "容器内的位置"
+                schema:
+                  type: path
+                  required: true
+              - variable: hostPath
+                label: "主机路径"
+                description: "主机路径"
+                schema:
+                  type: hostpath
+                  required: true

@@ -1,0 +1,22 @@
+image:
+  pullPolicy: IfNotPresent
+  repository: linuxserver/qbittorrent
+  tag: 4.4.3
+ownerUID: 1000
+ownerGID: 1000
+timezone: Europe/London
+environmentVariables: []
+extraAppVolumeMounts: []
+web_port: 9080
+tcp_port: 9881
+udp_port: 9881
+dnsConfig:
+  options: []
+emptyDirVolumes: true
+appVolumeMounts:
+  config:
+    emptyDir: true
+    mountPath: /config
+  downloads:
+    emptyDir: true
+    mountPath: /downloads
