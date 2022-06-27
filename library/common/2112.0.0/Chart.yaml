@@ -1,6 +1,6 @@
 apiVersion: v2
 name: common
-description: 中文Apps库
+description: A library chart for iX Official Catalog
 
 # A chart can be either an 'application' or a 'library' chart.
 #
