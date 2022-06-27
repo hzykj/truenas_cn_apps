@@ -24,27 +24,27 @@ questions:
     group: Networking
     schema:
       type: int
-      min: 8000
+      min: 9000
       max: 65535
-      default: 8080
+      default: 9080
       required: true
   - variable: tcp_port
     label: "qbittorrent 的 TCP 端口"
     group: Networking
     schema:
       type: int
-      min: 6000
+      min: 9000
       max: 65535
-      default: 6881
+      default: 9881
       required: true
   - variable: udp_port
     label: "qbittorrent 的 UDP 端口"
     group: Networking
     schema:
       type: int
-      min: 6000
+      min: 9000
       max: 65535
-      default: 6881
+      default: 9881
       required: true
 
   - variable: dnsConfig
