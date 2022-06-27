@@ -1,7 +1,7 @@
 image:
   pullPolicy: IfNotPresent
   repository: linuxserver/qbittorrent
-  tag: 4.4.3
+  tag: latest
 ownerUID: 1000
 ownerGID: 1000
 timezone: Europe/London
