@@ -21,16 +21,16 @@ spec: {{ include "common.deployment.common_spec" . | nindent 2 }}
               {{ end }}
             {{ end }}
           ports:
-          - name: Jellyfin
+          - name: jellyfin
             protocol: TCP
             containerPort: 8096
           {{- if .Values.hostNetwork }}
-            hostPort: {{ .Values.JellyfinServerHttp.port }}
+            hostPort: {{ .Values.jellyfinServerHttp.port }}
           {{- end }}
-          - name: Jellyfin-dlna
+          - name: jellyfin-dlna
             protocol: UDP
             containerPort: 1900
-          - name: Jellyfin-lnd
+          - name: jellyfin-lnd
             protocol: UDP
             containerPort: 7359
           env:
@@ -49,19 +49,19 @@ spec: {{ include "common.deployment.common_spec" . | nindent 2 }}
             {{ include "common.containers.environmentVariables" (dict "environmentVariables" $envList) | nindent 12 }}
           readinessProbe:
             httpGet:
-              path: /Jellyfin/System/Ping
+              path: /jellyfin/System/Ping
               port: 8096
             failureThreshold: 5
             periodSeconds: 15
           livenessProbe:
             httpGet:
-              path: /Jellyfin/System/Ping
+              path: /jellyfin/System/Ping
               port: 8096
             failureThreshold: 5
             periodSeconds: 15
           startupProbe:
             httpGet:
-              path: /Jellyfin/System/Ping
+              path: /jellyfin/System/Ping
               port: 8096
             initialDelaySeconds: 5
             failureThreshold: 40
