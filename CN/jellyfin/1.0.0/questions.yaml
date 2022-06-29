@@ -23,7 +23,7 @@ portals:
     host:
       - "$node_ip"
     ports:
-      - "$variable-JellyfinServerHttp.port"
+      - "$variable-jellyfinServerHttp.port"
     path: "/web"
 
 questions:
@@ -70,7 +70,7 @@ questions:
           description: "删除现有容器，再创建新的"
 
   # Port configuration
-  - variable: JellyfinServerHttp
+  - variable: jellyfinServerHttp
     label: "配置 Jellyfin 服务器 HTTP 服务"
     group: "Networking"
     schema:
@@ -83,7 +83,7 @@ questions:
             min: 9000
             max: 65535
             default: 9096
-#  - variable: JellyfinServerDNLA
+#  - variable: jellyfinServerDNLA
 #    label: "配置 Jellyfin 服务器 DNLA 服务"
 #    group: "Networking"
 #    schema:
@@ -97,7 +97,7 @@ questions:
 #            min: 9000
 #            max: 65535
 #            default: 9890
-#  - variable: JellyfinServerDiscover
+#  - variable: jellyfinServerDiscover
 #    label: "配置 Jellyfin 服务器 网络发现 服务"
 #    group: "Networking"
 #    schema:
@@ -195,7 +195,7 @@ questions:
                   $ref:
                     - "normalize/ixVolume"
                   show_if: [["hostPathEnabled", "=", false]]
-                  default: "ix-Jellyfin_config"
+                  default: "ix-jellyfin_config"
                   editable: false
               - variable: mountPath
                 label: "挂载路径"
