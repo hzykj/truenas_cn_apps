@@ -142,7 +142,7 @@ questions:
 
   - variable: ownerUID
     label: "文件系统用户ID"
-    group: Configuration
+    group: "Jellyfin Server Configuration"
     schema:
       type: int
       default: 1000
@@ -151,7 +151,7 @@ questions:
 
   - variable: ownerGID
     label: "文件系统用户组ID"
-    group: Configuration
+    group: "Jellyfin Server Configuration"
     schema:
       type: int
       default: 1000
@@ -160,7 +160,7 @@ questions:
 
   - variable: timezone
     label: "时区"
-    group: "Configuration"
+    group: "Jellyfin Server Configuration"
     schema:
       type: string
       $ref:
