@@ -1,0 +1,6 @@
+{{ $ports := list }}
+{{ $ports = mustAppend $ports (dict "name" "Jellyfin-dlna" "port" 1900 "protocol" "UDP" "targetPort" "Jellyfin-dlna") }}
+{{ $ports = mustAppend $ports (dict "name" "Jellyfin-lnd" "port" 7359 "protocol" "UDP" "targetPort" "Jellyfin-lnd") }}
+{{ $params := . }}
+{{ $_ := set $params "commonService" (dict "type" "ClusterIP" "ports" $ports "nameSuffix" "udp" ) }}
+{{ include "common.classes.service" $params }}

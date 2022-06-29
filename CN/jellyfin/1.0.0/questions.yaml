@@ -1,0 +1,250 @@
+groups:
+  - name: "Jellyfin Server Configuration"
+    description: "配置 Jellyfin 服务器"
+  - name: "Networking"
+    description: "为容器配置网络"
+  - name: "Storage"
+    description: "配置储存"
+  - name: "Workload Details"
+    description: "Configure how workload should be deployed"
+  - name: "Scaling/Upgrade Policy"
+    description: "设置升级时如何替换容器"
+  - name: "Restart Policy"
+    description: "设置出错时重启容器"
+  - name: "Resource Reservation"
+    description: "分配给容器的硬件资源"
+  - name: "Advanced DNS Settings"
+    description: "配置 DNS 设置"
+
+portals:
+  web_portal:
+    protocols:
+      - "http"
+    host:
+      - "$node_ip"
+    ports:
+      - "$variable-JellyfinServerHttp.port"
+    path: "/web"
+
+questions:
+  - variable: hostNetwork
+    label: "设置主机网络"
+    group: "Networking"
+    schema:
+      type: boolean
+      default: false
+
+  - variable: environmentVariables
+    label: "Jellyfin 服务器的环境变量"
+    group: "Jellyfin Server Configuration"
+    schema:
+      type: list
+      default: []
+      items:
+        - variable: environmentVariable
+          label: "环境变量"
+          schema:
+            type: dict
+            attrs:
+              - variable: name
+                label: "名称"
+                schema:
+                  type: string
+              - variable: value
+                label: "值"
+                schema:
+                  type: string
+
+  # Update strategy
+  - variable: updateStrategy
+    description: "升级策略"
+    label: "更新策略"
+    group: "Scaling/Upgrade Policy"
+    schema:
+      type: string
+      default: "Recreate"
+      enum:
+        - value: "RollingUpdate"
+          description: "创建新的容器，再删除旧的"
+        - value: "Recreate"
+          description: "删除现有容器，再创建新的"
+
+  # Port configuration
+  - variable: JellyfinServerHttp
+    label: "配置 Jellyfin 服务器 HTTP 服务"
+    group: "Networking"
+    schema:
+      type: dict
+      attrs:
+        - variable: port
+          label: "Jellyfin 服务器 Web 端口"
+          schema:
+            type: int
+            min: 9000
+            max: 65535
+            default: 9096
+#  - variable: JellyfinServerDNLA
+#    label: "配置 Jellyfin 服务器 DNLA 服务"
+#    group: "Networking"
+#    schema:
+#      type: dict
+#      attrs:
+#        - variable: port
+#          label: "Jellyfin 服务器 DNLA服务 端口"
+#          description: "UDP端口"
+#          schema:
+#            type: int
+#            min: 9000
+#            max: 65535
+#            default: 9890
+#  - variable: JellyfinServerDiscover
+#    label: "配置 Jellyfin 服务器 网络发现 服务"
+#    group: "Networking"
+#    schema:
+#      type: dict
+#      attrs:
+#        - variable: port
+#          label: "Jellyfin 服务器 网络发现服务 端口"
+#          description: "UDP端口"
+#          schema:
+#            type: int
+#            min: 9000
+#            max: 65535
+#            default: 9859
+
+  - variable: dnsConfig
+    label: "DNS 配置"
+    group: "Advanced DNS Settings"
+    schema:
+      type: dict
+      attrs:
+        - variable: options
+          label: "DNS 配置"
+          schema:
+            type: list
+            items:
+              - variable: optionsEntry
+                label: "选项条目配置"
+                schema:
+                  type: dict
+                  attrs:
+                    - variable: name
+                      label: "选项名称"
+                      default: "nameserver"
+                      schema:
+                        type: string
+                        required: true
+                    - variable: value
+                      label: "选项值"
+                      schema:
+                        type: string
+                        required: true
+
+  - variable: ownerUID
+    label: "文件系统用户ID"
+    group: Configuration
+    schema:
+      type: int
+      default: 1000
+      min: 1
+      max: 65535
+
+  - variable: ownerGID
+    label: "文件系统用户组ID"
+    group: Configuration
+    schema:
+      type: int
+      default: 1000
+      min: 1
+      max: 65535
+
+  - variable: timezone
+    label: "时区"
+    group: "Configuration"
+    schema:
+      type: string
+      $ref:
+        - "definitions/timezone"
+
+  # Specify GPU configuration
+  - variable: gpuConfiguration
+    label: "显卡配置"
+    group: "Resource Reservation"
+    schema:
+      type: dict
+      $ref:
+        - "definitions/gpuConfiguration"
+      attrs: []
+
+  - variable: appVolumeMounts
+    label: "Jellyfin 服务器的储存"
+    group: "Storage"
+    schema:
+      type: dict
+      attrs:
+        - variable: config
+          label: "配置文件存储路径"
+          schema:
+            type: dict
+            attrs:
+              - variable: datasetName
+                label: "配置文件所在的位置"
+                schema:
+                  type: string
+                  hidden: true
+                  $ref:
+                    - "normalize/ixVolume"
+                  show_if: [["hostPathEnabled", "=", false]]
+                  default: "ix-Jellyfin_config"
+                  editable: false
+              - variable: mountPath
+                label: "挂载路径"
+                description: "容器内的位置"
+                schema:
+                  type: path
+                  editable: true
+                  hidden: true
+                  default: "/config"
+              - variable: hostPathEnabled
+                label: "为 Jellyfin 设置配置文件的储存路径"
+                schema:
+                  type: boolean
+                  default: false
+                  show_subquestions_if: true
+                  subquestions:
+                    - variable: hostPath
+                      label: "主机路径"
+                      schema:
+                        type: hostpath
+                        required: true
+
+  - variable: extraAppVolumeMounts
+    label: "服务器额外文件路径"
+    group: "Storage"
+    schema:
+      type: list
+      items:
+        - variable: extraAppVolume
+          label: "Jellyfin 额外主机路径"
+          description: "为 Jellyfin 添加额外的文件路径"
+          schema:
+            type: dict
+            attrs:
+              - variable: mountPath
+                label: "挂载路径"
+                description: "容器内的位置"
+                schema:
+                  type: path
+                  required: true
+              - variable: hostPath
+                label: "主机路径"
+                description: "主机路径"
+                schema:
+                  type: hostpath
+                  required: true
+              - variable: readOnly
+                label: "只读"
+                description: "以只读模式挂载主机路径"
+                schema:
+                  type: boolean
+                  default: false

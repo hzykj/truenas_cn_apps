@@ -1,0 +1,5 @@
+# Jellyfin Media Server helm chart
+
+## Configuration
+
+[Jellyfin](https://jellyfin.org/) 是一个免费软件媒体系统，可让您控制管理和流式传输您的媒体。它是专有 Emby 和 Plex 的替代方案，通过多个应用程序从专用服务器向最终用户设备提供媒体。Jellyfin 源自 Emby 的 3.5.2 版本，并移植到 .NET Core 框架以实现全面的跨平台支持。没有附加条件，没有高级许可证或功能，也没有隐藏的议程：只是一个想要构建更好的东西并共同努力实现它的团队。
