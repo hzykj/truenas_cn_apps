@@ -1,0 +1,15 @@
+{{ $svc := .Values.jellyfinServerHttp }}
+{{ $ports := list }}
+{{ $ports = mustAppend $ports (dict "name" "jellyfin_web" "port" $svc.web_port "nodePort" $svc.web_port "targetPort" "jellyfin_web") }}
+{{ $ports = mustAppend $ports (dict "name" "jellyfin_dnla" "port" $svc.dnla_port "nodePort" $svc.dnla_port "targetPort" "jellyfin_dnla" "protocol" "UDP") }}
+{{ $ports = mustAppend $ports (dict "name" "jellyfin_lnd" "port" $svc.lnd_port "nodePort" $svc.lnd_port "targetPort" "jellyfin_lnd" "protocol" "UDP") }}
+{{ $params := . }}
+{{ $_ := set $params "commonService" (dict "ports" $ports ) }}
+{{ if .Values.hostNetwork }}
+{{ $_ := set $params.commonService "nameSuffix" "cluster-ip" }}
+{{ $_1 := set $params.commonService "type" "ClusterIP" }}
+{{ else }}
+{{ $_ := set $params.commonService "nameSuffix" "cluster-ip-nohost" }}
+{{ $_1 := set $params.commonService "type" "NodePort" }}
+{{ end }}
+{{ include "common.classes.service" $params }}
