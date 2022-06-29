@@ -1,6 +1,6 @@
 groups:
-  - name: "Jellyfin Server Configuration"
-    description: "配置 Jellyfin 服务器"
+  - name: "jellyfin Server Configuration"
+    description: "配置 jellyfin 服务器"
   - name: "Networking"
     description: "为容器配置网络"
   - name: "Storage"
@@ -35,8 +35,8 @@ questions:
       default: false
 
   - variable: environmentVariables
-    label: "Jellyfin 服务器的环境变量"
-    group: "Jellyfin Server Configuration"
+    label: "jellyfin 服务器的环境变量"
+    group: "jellyfin Server Configuration"
     schema:
       type: list
       default: []
@@ -71,26 +71,26 @@ questions:
 
   # Port configuration
   - variable: jellyfinServerHttp
-    label: "配置 Jellyfin 服务器 HTTP 服务"
+    label: "配置 jellyfin 服务器 HTTP 服务"
     group: "Networking"
     schema:
       type: dict
       attrs:
         - variable: port
-          label: "Jellyfin 服务器 Web 端口"
+          label: "jellyfin 服务器 Web 端口"
           schema:
             type: int
             min: 9000
             max: 65535
             default: 9096
 #  - variable: jellyfinServerDNLA
-#    label: "配置 Jellyfin 服务器 DNLA 服务"
+#    label: "配置 jellyfin 服务器 DNLA 服务"
 #    group: "Networking"
 #    schema:
 #      type: dict
 #      attrs:
 #        - variable: port
-#          label: "Jellyfin 服务器 DNLA服务 端口"
+#          label: "jellyfin 服务器 DNLA服务 端口"
 #          description: "UDP端口"
 #          schema:
 #            type: int
@@ -98,13 +98,13 @@ questions:
 #            max: 65535
 #            default: 9890
 #  - variable: jellyfinServerDiscover
-#    label: "配置 Jellyfin 服务器 网络发现 服务"
+#    label: "配置 jellyfin 服务器 网络发现 服务"
 #    group: "Networking"
 #    schema:
 #      type: dict
 #      attrs:
 #        - variable: port
-#          label: "Jellyfin 服务器 网络发现服务 端口"
+#          label: "jellyfin 服务器 网络发现服务 端口"
 #          description: "UDP端口"
 #          schema:
 #            type: int
@@ -142,7 +142,7 @@ questions:
 
   - variable: ownerUID
     label: "文件系统用户ID"
-    group: "Jellyfin Server Configuration"
+    group: "jellyfin Server Configuration"
     schema:
       type: int
       default: 1000
@@ -151,7 +151,7 @@ questions:
 
   - variable: ownerGID
     label: "文件系统用户组ID"
-    group: "Jellyfin Server Configuration"
+    group: "jellyfin Server Configuration"
     schema:
       type: int
       default: 1000
@@ -160,7 +160,7 @@ questions:
 
   - variable: timezone
     label: "时区"
-    group: "Jellyfin Server Configuration"
+    group: "jellyfin Server Configuration"
     schema:
       type: string
       $ref:
@@ -177,7 +177,7 @@ questions:
       attrs: []
 
   - variable: appVolumeMounts
-    label: "Jellyfin 服务器的储存"
+    label: "jellyfin 服务器的储存"
     group: "Storage"
     schema:
       type: dict
@@ -206,7 +206,7 @@ questions:
                   hidden: true
                   default: "/config"
               - variable: hostPathEnabled
-                label: "为 Jellyfin 设置配置文件的储存路径"
+                label: "为 jellyfin 设置配置文件的储存路径"
                 schema:
                   type: boolean
                   default: false
@@ -225,8 +225,8 @@ questions:
       type: list
       items:
         - variable: extraAppVolume
-          label: "Jellyfin 额外主机路径"
-          description: "为 Jellyfin 添加额外的文件路径"
+          label: "jellyfin 额外主机路径"
+          description: "为 jellyfin 添加额外的文件路径"
           schema:
             type: dict
             attrs:
